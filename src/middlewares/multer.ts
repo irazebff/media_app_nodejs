@@ -1,26 +1,26 @@
 import multer from 'multer';
 import path from 'path';
+import express from 'express';
 
-// Configuração do armazenamento
 const storage = multer.diskStorage({
-  destination: path.resolve(__dirname, '..', '..', 'uploads'),
+  destination: (req, file, callback) => {
+    callback(null, path.resolve(__dirname, '..', '..', 'uploads'));
+  },
   filename: (req, file, callback) => {
     const filename = `${Date.now()}-${file.originalname}`;
     callback(null, filename);
   },
 });
 
-// Função para validar se o arquivo é uma imagem ou áudio
-const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-  // Verifica se o mimetype começa com 'image/' ou 'audio/'
+const fileFilter = (req: express.Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+
   if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('audio/')) {
-    cb(null, true); // Aceita o arquivo
+    cb(null, true); 
   } else {
-    cb(new Error('Formato de arquivo não suportado: Apenas imagens e áudios são permitidos'), false); // Rejeita o arquivo
+    cb(new Error('Formato de arquivo não suportado: Apenas imagens e áudios são permitidos') as any, false);
   }
 };
 
-// Criação do middleware de upload com a configuração de storage e fileFilter
 const upload = multer({ 
   storage,
   fileFilter,

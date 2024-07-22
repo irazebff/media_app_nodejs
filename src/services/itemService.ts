@@ -10,6 +10,8 @@ interface CreateItemInput {
   description: string;
   imageUrl: string;
   audioUrl: string;
+  isTrack: boolean;
+  genero: string;
 }
 
 export const getItems = async () => {
@@ -26,7 +28,17 @@ export const getItem = async (id: string) => {
 
 export const createItem = async (input: CreateItemInput) => {
   const newItem = await prisma.item.create({
-    data: input,
+    data: {
+      title: input.title,
+      artist: input.artist,
+      album: input.album,
+      coverURL: input.coverURL,
+      description: input.description,
+      imageUrl: input.imageUrl,
+      audioUrl: input.audioUrl,
+      isTrack: input.isTrack,
+      genero: input.genero,
+    },
   });
   return newItem;
 };
@@ -34,7 +46,17 @@ export const createItem = async (input: CreateItemInput) => {
 export const updateItem = async (id: string, input: Partial<CreateItemInput>) => {
   const updatedItem = await prisma.item.update({
     where: { id },
-    data: input,
+    data: {
+      title: input.title,
+      artist: input.artist,
+      album: input.album,
+      coverURL: input.coverURL,
+      description: input.description,
+      imageUrl: input.imageUrl,
+      audioUrl: input.audioUrl,
+      isTrack: input.isTrack,
+      genero: input.genero,
+    },
   });
   return updatedItem;
 };

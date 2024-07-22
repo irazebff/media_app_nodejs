@@ -7,8 +7,8 @@ const authService = new AuthService();
 export class AuthController {
   async register(request: Request, response: Response): Promise<Response> {
     try {
-      const { email, password } = request.body;
-      const user = await authService.register(email, password);
+      const { email, password, role } = request.body;
+      const user = await authService.register(email, password, role);
       return response.status(201).json(user);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {

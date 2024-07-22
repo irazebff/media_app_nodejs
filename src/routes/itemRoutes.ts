@@ -7,13 +7,14 @@ import {
   updateItem,
   deleteItem,
 } from '../controllers/itemController';
+import { checkPermission } from '../middlewares/checkPermission';
 
 const router = Router();
 
-router.get('/items', getItems);
-router.get('/items/:id', getItem);
-router.post('/items', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), createItem);
-router.put('/items/:id', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), updateItem);
-router.delete('/items/:id', deleteItem);
+router.get('/items', checkPermission('CLIENT'), getItems);
+router.get('/items/:id', checkPermission('CLIENT'), getItem);
+router.post('/items', checkPermission('ADMIN'), upload.fields([{ name: 'image', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), createItem);
+router.put('/items/:id', checkPermission('ADMIN'), upload.fields([{ name: 'image', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), updateItem);
+router.delete('/items/:id', checkPermission('ADMIN'), deleteItem);
 
 export { router };

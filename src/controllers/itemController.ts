@@ -82,3 +82,15 @@ export const deleteItem = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+export const purchaseItem = async (req: Request, res: Response) => {
+  try {
+    const userId = req.userId;
+    const { itemId } = req.body;
+
+    const purchase = await itemService.purchaseItem(userId, itemId);
+    res.status(201).json(purchase);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};

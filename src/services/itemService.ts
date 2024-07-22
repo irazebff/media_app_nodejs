@@ -15,19 +15,17 @@ interface CreateItemInput {
 }
 
 export const getItems = async () => {
-  const items = await prisma.item.findMany();
-  return items;
+  return await prisma.item.findMany();
 };
 
 export const getItem = async (id: string) => {
-  const item = await prisma.item.findUnique({
+  return await prisma.item.findUnique({
     where: { id },
   });
-  return item;
 };
 
 export const createItem = async (input: CreateItemInput) => {
-  const newItem = await prisma.item.create({
+  return await prisma.item.create({
     data: {
       title: input.title,
       artist: input.artist,
@@ -40,11 +38,10 @@ export const createItem = async (input: CreateItemInput) => {
       genero: input.genero,
     },
   });
-  return newItem;
 };
 
 export const updateItem = async (id: string, input: Partial<CreateItemInput>) => {
-  const updatedItem = await prisma.item.update({
+  return await prisma.item.update({
     where: { id },
     data: {
       title: input.title,
@@ -58,11 +55,10 @@ export const updateItem = async (id: string, input: Partial<CreateItemInput>) =>
       genero: input.genero,
     },
   });
-  return updatedItem;
 };
 
 export const deleteItem = async (id: string) => {
-  await prisma.item.delete({
+  return await prisma.item.delete({
     where: { id },
   });
 };

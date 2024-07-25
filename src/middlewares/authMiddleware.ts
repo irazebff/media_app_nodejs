@@ -12,7 +12,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    console.log("No token provided");
     return res.status(401).json({ message: 'No token provided' });
   }
 
@@ -23,7 +22,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     req.userId = decoded.id;
     next();
   } catch (err) {
-    console.log("Failed to authenticate token:", err);
     return res.status(401).json({ message: 'Failed to authenticate token' });
   }
 };

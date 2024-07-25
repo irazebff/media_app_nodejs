@@ -11,9 +11,11 @@ model User {
   id               String           @id @default(uuid())
   email            String           @unique
   password         String
+  role             Role             @default(CLIENT)
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
   events           Event[]
+  purchases        Purchase[]
   userPermissions  UserPermission[]
 }
 
@@ -30,6 +32,7 @@ model Item {
   genero      String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  purchases   Purchase[]
 }
 
 model Event {
@@ -51,7 +54,7 @@ model Permission {
   name        String           @unique
   description String
   createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  updatedAt   DateTime         @default(now())
   users       UserPermission[]
 }
 
@@ -64,4 +67,18 @@ model UserPermission {
   permission    Permission  @relation(fields: [permissionId], references: [id])
 
   @@unique([userId, permissionId])
+}
+
+model Purchase {
+  id        String   @id @default(uuid())
+  userId    String
+  itemId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  item      Item     @relation(fields: [itemId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  CLIENT
 }

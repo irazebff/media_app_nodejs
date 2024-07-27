@@ -8,6 +8,7 @@ import userRoutes from './routes/userRoutes';
 import { authRoutes } from './routes/authRoutes'; 
 import { router as itemRoutes } from './routes/itemRoutes'; 
 import { eventRoutes } from './routes/eventRoutes';
+import  purchaseRoutes from './routes/purchaseRoutes'; 
 
 dotenv.config();
 
@@ -21,7 +22,8 @@ app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use(authRoutes);
 app.use('/api', itemRoutes);
-app.use('/api', eventRoutes); // Adicionar rotas de eventos
+app.use('/api', eventRoutes); 
+app.use('/api/purchases', purchaseRoutes); 
 
 // Middleware de erro global
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

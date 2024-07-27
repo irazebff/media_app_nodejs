@@ -1,3 +1,4 @@
+// src/middlewares/checkPermission.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
@@ -8,7 +9,7 @@ dotenv.config();
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-export const checkPermission = (requiredPermissions: string[]) => {
+export const checkPermission = (requiredRoles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
 
@@ -20,30 +21,18 @@ export const checkPermission = (requiredPermissions: string[]) => {
     const [, token] = authHeader.split(' ');
 
     try {
-      const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
+      const decoded = jwt.verify(token, JWT_SECRET) as { id: string, role: string };
       const userId = decoded.id;
+      const userRole = decoded.role;
 
-      // Obter permissões do usuário
-      const userPermissions = await prisma.userPermission.findMany({
-        where: { userId },
-        include: { permission: true },
-      });
+      console.log("Decoded token:", decoded);
+      console.log("User ID from token:", userId);
 
-      console.log("User permissions:", userPermissions);
-      console.log("Required permissions:", requiredPermissions);
+      if (!requiredRoles.includes(userRole)) {
+        return res.status(403).json({ message: 'Forbidden: Insufficient permissions' });
+      }
 
-      // Verificar se o usuário tem pelo menos uma das permissões requeridas
-    //   const hasPermission = userPermissions.some(userPermission =>
-    //     requiredPermissions.includes(userPermission.permission.name)
-    //   );
-
-    //   console.log("Has permission:", hasPermission);
-
-    //   if (!hasPermission) {
-    //     return res.status(403).json({ message: 'Permission denied' });
-    //   }
-
-      req.userId = userId;
+      req.userId = userId; // Adiciona o userId ao objeto de requisição
       next();
     } catch (error) {
       console.log("Failed to authenticate token:", error);

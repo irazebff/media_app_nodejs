@@ -1,12 +1,11 @@
-// src/routes/purchaseRoutes.ts
 import { Router } from 'express';
 import { createPurchase, getPurchasesByUser } from '../controllers/purchaseController';
+import { authMiddleware } from '../middlewares/authMiddleware';
 import { checkPermission } from '../middlewares/checkPermission';
-import { Role } from '@prisma/client';
 
 const router = Router();
 
-router.post('/', checkPermission([Role.CLIENT]), createPurchase);
-router.get('/', checkPermission([Role.CLIENT]), getPurchasesByUser);
+router.post('/', authMiddleware, checkPermission(['CLIENT']), createPurchase);
+router.get('/', authMiddleware, checkPermission(['CLIENT']), getPurchasesByUser);
 
 export default router;

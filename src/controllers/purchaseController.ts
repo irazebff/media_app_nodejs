@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as purchaseService from '../services/purchaseService';
+import * as purchaseService from '../services/purchaseService'; // Corrigir importação
 
 export const createPurchase = async (req: Request, res: Response) => {
   try {
@@ -12,7 +12,7 @@ export const createPurchase = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'User ID is required' });
     }
 
-    const purchase = await purchaseService.createPurchase(userId, itemId);
+    const purchase = await purchaseService.createPurchase(userId, itemId); // Utilizando o serviço de compras
     res.status(201).json(purchase);
   } catch (error) {
     console.error('Erro ao criar compra:', error);
@@ -28,7 +28,7 @@ export const getPurchasesByUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'User ID is required' });
     }
 
-    const purchases = await purchaseService.getPurchasesByUser(userId);
+    const purchases = await purchaseService.getPurchasesByUser(userId); // Utilizando o serviço de compras
     res.json(purchases);
   } catch (error) {
     console.error('Erro ao obter compras:', error);

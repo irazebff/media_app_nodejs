@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import * as itemService from '../services/itemService';
 
-export const getItems = async (req: Request, res: Response) => {
+export const getItems = async (_req: Request, res: Response) => {
   try {
     const items = await itemService.getItems();
+    console.log('Retrieved items:', items);
     res.json(items);
   } catch (error) {
+    console.error('Error retrieving items:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -15,10 +17,13 @@ export const getItem = async (req: Request, res: Response) => {
     const itemId = req.params.id;
     const item = await itemService.getItem(itemId);
     if (!item) {
+      console.log(`Item not found: ${itemId}`);
       return res.status(404).json({ message: 'Item not found' });
     }
+    console.log('Retrieved item:', item);
     res.json(item);
   } catch (error) {
+    console.error('Error retrieving item:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -40,8 +45,10 @@ export const createItem = async (req: Request, res: Response) => {
       isTrack,
       genero,
     });
+    console.log('Created item:', newItem);
     res.status(201).json(newItem);
   } catch (error) {
+    console.error('Error creating item:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -65,10 +72,13 @@ export const updateItem = async (req: Request, res: Response) => {
       genero,
     });
     if (!updatedItem) {
+      console.log(`Item not found for update: ${itemId}`);
       return res.status(404).json({ message: 'Item not found' });
     }
+    console.log('Updated item:', updatedItem);
     res.json(updatedItem);
   } catch (error) {
+    console.error('Error updating item:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -77,20 +87,10 @@ export const deleteItem = async (req: Request, res: Response) => {
   try {
     const itemId = req.params.id;
     await itemService.deleteItem(itemId);
+    console.log(`Deleted item: ${itemId}`);
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-};
-
-export const purchaseItem = async (req: Request, res: Response) => {
-  try {
-    const userId = req.userId;
-    const { itemId } = req.body;
-
-    const purchase = await itemService.purchaseItem(userId, itemId);
-    res.status(201).json(purchase);
-  } catch (error) {
+    console.error('Error deleting item:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };

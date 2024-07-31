@@ -19,10 +19,11 @@ services:
     depends_on:
       - postgres
     environment:
-      DATABASE_URL: "postgresql://postgres:postgres@postgres:5435/media_api?schema=public"
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/media_api?schema=public"
     volumes:
       - .:/usr/src/app
-    command: bash -c "npx prisma migrate deploy && npm run dev"
+    command: >
+      sh -c "npx prisma migrate deploy && npm run dev"
 
 volumes:
   postgres-data:

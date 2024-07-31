@@ -62,7 +62,3 @@ export const deleteItem = async (id: string) => {
     where: { id },
   });
 };
-
-export function purchaseItem(userId: string | undefined, itemId: any) {
-  throw new Error('Function not implemented.');
-}

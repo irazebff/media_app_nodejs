@@ -7,9 +7,14 @@ export const getEvents = async (req: Request, res: Response) => {
     const events = await eventService.getEvents();
     console.log('Events fetched successfully:', events);
     res.json(events);
-  } catch (error) {
-    console.error('Erro ao buscar eventos:', (error instanceof Error) ? error.message : 'Unknown error');
-    res.status(500).json({ message: 'Erro ao buscar eventos' });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Erro ao buscar eventos:', error.message);
+      res.status(500).json({ message: error.message });
+    } else {
+      console.error('Erro ao buscar eventos: erro desconhecido');
+      res.status(500).json({ message: 'Unknown error' });
+    }
   }
 };
 
@@ -24,9 +29,14 @@ export const getEvent = async (req: Request, res: Response) => {
     }
     console.log('Event fetched successfully:', event);
     res.json(event);
-  } catch (error) {
-    console.error('Erro ao buscar evento:', (error instanceof Error) ? error.message : 'Unknown error');
-    res.status(500).json({ message: 'Erro ao buscar evento' });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Erro ao buscar evento:', error.message);
+      res.status(500).json({ message: error.message });
+    } else {
+      console.error('Erro ao buscar evento: erro desconhecido');
+      res.status(500).json({ message: 'Unknown error' });
+    }
   }
 };
 
@@ -61,9 +71,14 @@ export const createEvent = async (req: Request, res: Response) => {
     });
 
     res.status(201).json(newEvent);
-  } catch (error) {
-    console.error('Erro ao criar evento:', (error instanceof Error) ? error.message : 'Unknown error');
-    res.status(500).json({ message: error.message });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Erro ao criar evento:', error.message);
+      res.status(500).json({ message: error.message });
+    } else {
+      console.error('Erro ao criar evento: erro desconhecido');
+      res.status(500).json({ message: 'Unknown error' });
+    }
   }
 };
 
@@ -105,9 +120,14 @@ export const updateEvent = async (req: Request, res: Response) => {
     }
     console.log('Event updated successfully:', updatedEvent);
     res.json(updatedEvent);
-  } catch (error) {
-    console.error('Erro ao atualizar evento:', (error instanceof Error) ? error.message : 'Unknown error');
-    res.status(500).json({ message: 'Erro ao atualizar evento' });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Erro ao atualizar evento:', error.message);
+      res.status(500).json({ message: error.message });
+    } else {
+      console.error('Erro ao atualizar evento: erro desconhecido');
+      res.status(500).json({ message: 'Unknown error' });
+    }
   }
 };
 
@@ -118,8 +138,13 @@ export const deleteEvent = async (req: Request, res: Response) => {
     await eventService.deleteEvent(eventId);
     console.log('Event deleted successfully');
     res.status(204).send();
-  } catch (error) {
-    console.error('Erro ao deletar evento:', (error instanceof Error) ? error.message : 'Unknown error');
-    res.status(500).json({ message: 'Erro ao deletar evento' });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Erro ao deletar evento:', error.message);
+      res.status(500).json({ message: error.message });
+    } else {
+      console.error('Erro ao deletar evento: erro desconhecido');
+      res.status(500).json({ message: 'Unknown error' });
+    }
   }
 };

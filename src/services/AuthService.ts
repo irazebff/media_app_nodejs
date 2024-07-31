@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'; // Usando bcrypt, não bcryptjs
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { PrismaClient, User, Role } from '@prisma/client';
 import dotenv from 'dotenv';
@@ -9,7 +9,6 @@ const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 export class AuthService {
-  // Registra um novo usuário com verificação de existência e hash de senha
   async register(email: string, password: string, role: string): Promise<User> {
     const existingUser = await prisma.user.findUnique({
       where: { email },
@@ -19,8 +18,6 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Converte a string role para o enum Role
     const roleEnum = Role[role.toUpperCase() as keyof typeof Role];
 
     const user = await prisma.user.create({
@@ -31,10 +28,10 @@ export class AuthService {
       },
     });
 
+    console.info(`New user created: ${email}, role: ${roleEnum}`);
     return user;
   }
 
-  // Autentica um usuário e retorna um token JWT
   async login(email: string, password: string): Promise<string> {
     const user = await prisma.user.findUnique({
       where: { email },
@@ -50,19 +47,23 @@ export class AuthService {
       { expiresIn: '1h' }
     );
 
+    console.info(`Token generated for user: ${email}`);
     return token;
   }
 
-  // Retorna todos os usuários registrados no sistema
   async getAllUsers(): Promise<User[]> {
-    return await prisma.user.findMany({
+    const users = await prisma.user.findMany({
       select: {
         id: true,
         email: true,
+        password: true,
         role: true,
         createdAt: true,
-        // Não incluir 'password' para segurança
+        updatedAt: true,
       }
     });
+
+    console.info(`Retrieved all users: ${users.map(user => user.email).join(', ')}`);
+    return users;
   }
 }

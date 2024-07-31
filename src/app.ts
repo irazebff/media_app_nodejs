@@ -26,7 +26,7 @@ app.use('/api', eventRoutes);
 app.use('/api/purchases', purchaseRoutes); 
 
 // Middleware de erro global
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error('Erro:', err);
   res.status(500).json({ message: 'Erro interno no servidor' });
 });

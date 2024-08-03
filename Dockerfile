@@ -19,6 +19,12 @@ COPY . .
 # Recompile as dependências nativas para garantir compatibilidade com a arquitetura do container
 RUN npm rebuild bcrypt --build-from-source
 
+RUN npm rebuild sharp --build-from-source
+RUN npm rebuild sqlite3 --build-from-source
+
+# Gera o Prisma Client
+RUN npx prisma generate
+
 # Exponha a porta que a aplicação irá rodar
 EXPOSE 3000
 

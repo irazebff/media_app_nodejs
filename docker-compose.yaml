@@ -22,6 +22,7 @@ services:
       DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/media_api?schema=public"
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/node_modules # Adicionado para evitar sobrescrever node_modules
     command: >
       sh -c "npx prisma migrate deploy && npm run dev"
 
